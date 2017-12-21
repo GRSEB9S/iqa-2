@@ -30,9 +30,9 @@ if len(sys.argv) < 2:
 	info('Usage: python server.py')
 	sys.exit()
 
-def detect(imgid):
+def detect(image):
 	try:
-		iqa = IQA(imgid)
+		iqa = IQA(image)
 		ret = {'sharpness':iqa.sharpness(),'colorfulness':iqa.colorfulness(),'entropy':iqa.entropy()}
 		return ret
 	except:
@@ -46,10 +46,10 @@ class Handler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header('Content-type','application/json')
 		self.end_headers()
-		if 'imgid' in query:
-			self.wfile.write(json.dumps(detect(query['imgid'])))
+		if 'image' in query:
+			self.wfile.write(json.dumps(detect(query['image'])))
 		else:
-			self.wfile.write(json.dumps({'error':'missing parameter imgid'}))
+			self.wfile.write(json.dumps({'error':'missing parameter image'}))
 		self.finish()
 		self.connection.close()
 
