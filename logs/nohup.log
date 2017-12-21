@@ -1,7 +1,0 @@
-(2017-12-21 01:25:28) INFO: Server listening on port 8000
-172.24.1.2 - - [21/Dec/2017 01:25:33] "GET /?imgid=https://t.prt.news/rqkFaj908c4L.jpg HTTP/1.1" 200 -
-172.24.1.2 - - [21/Dec/2017 01:25:33] "GET /favicon.ico HTTP/1.1" 200 -
-172.24.1.2 - - [21/Dec/2017 01:25:34] "GET /?imgid=https://t.prt.news/rqkFaj908c4L.jpg HTTP/1.1" 200 -
-172.24.1.2 - - [21/Dec/2017 01:25:34] "GET /favicon.ico HTTP/1.1" 200 -
-172.24.1.2 - - [21/Dec/2017 01:25:51] "GET /?imgid=https://t.prt.news/rqkFaj908c4L.jpg HTTP/1.1" 200 -
-172.24.1.2 - - [21/Dec/2017 01:25:51] "GET /favicon.ico HTTP/1.1" 200 -
