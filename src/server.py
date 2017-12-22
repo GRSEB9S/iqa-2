@@ -33,7 +33,7 @@ if len(sys.argv) < 2:
 def detect(image):
 	try:
 		iqa = IQA(image)
-		ret = {'sharpness':iqa.sharpness(),'colorfulness':iqa.colorfulness(),'entropy':iqa.entropy()}
+		ret = {'sharpness':iqa.sharpness(),'colorfulness':iqa.colorfulness(),'entropy':iqa.entropy(),'shape':iqa.shape()}
 		return ret
 	except:
 		err('%s not in database' % ip)

@@ -15,10 +15,15 @@ import numpy as np
 
 class IQA:
 	def __init__(self, imgid):
-		url = 'http://img.particlenews.com/image.php?type=_400x400&url='+imgid
+		url = 'http://img.particlenews.com/image.php?url='+imgid
 		resp = urllib.urlopen(url)
-		image = image = np.asarray(bytearray(resp.read()), dtype="uint8")
+		image = np.asarray(bytearray(resp.read()), dtype="uint8")
 		self.img = cv2.imdecode(image, cv2.IMREAD_COLOR)
+		w,h,c = self.img.shape
+		scale = (160000.0/(w*h))**0.5
+		dsize = (int(round(w*scale)), int(round(h*scale)))
+		self.size = (w,h)
+		self.img = cv2.resize(self.img,dsize,interpolation=cv2.INTER_AREA)
 		self.gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
 
 	def sharpness(self):
@@ -42,7 +47,9 @@ class IQA:
 		hist = hist.ravel()/hist.sum()
 		logs = np.log2(hist+0.000001)
 		return -1 * (hist*logs).sum()
-
+	
+	def shape(self):
+		return self.size
 
 if __name__ == '__main__':
 	for line in sys.stdin:
@@ -51,3 +58,4 @@ if __name__ == '__main__':
 		print 'sharpness:',iqa.sharpness()
 		print 'colorfulness:',iqa.colorfulness()
 		print 'entropy',iqa.entropy()
+		print 'shape',iqa.shape()
