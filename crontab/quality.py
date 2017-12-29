@@ -21,7 +21,7 @@ except:
 
 docs = []
 
-for d in cl.find({'lastUpdate':{'$gte':last_ts}}).sort('lastUpdate', 1).limit(3000):
+for d in cl.find({'lastUpdate':{'$gte':last_ts}}):
   docs.append(d)
 
 def process(d):
