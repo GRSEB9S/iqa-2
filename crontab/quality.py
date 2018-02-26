@@ -21,21 +21,21 @@ except:
 
 docs = []
 
-for d in cl.find({'lastUpdate':{'$gte':last_ts}}).limit(10000):
+for d in cl.find({'lastUpdate':{'$gte':last_ts}}).limit(20000):
   docs.append(d)
 
 def process(d):
   docid = d['_id']
   if 'quality' not in d:
     try:
-      r = requests.get('http://internal-a4api-74034796.us-west-2.elb.amazonaws.com/Website/contents/content?docid=%s&fields=image' % docid)
+      r = requests.get('http://a4api.ha.nb.com/Website/contents/content?docid=%s&fields=image' % docid)
       j = json.loads(r.content)
       if 'documents' not in j:
         raise Exception('docid not exists')
       if 'image' not in j['documents'][0]:
         raise Exception('image not exists')
       imgid = j['documents'][0]['image']
-      r = requests.get('http://internal-a4api-74034796.us-west-2.elb.amazonaws.com/Website/video/image-quality-check?image=%s' % imgid)
+      r = requests.get('http://a4api.ha.nb.com/Website/image/quality-check?image=%s' % imgid)
       j = json.loads(r.content)
       q = j['result'][imgid]['quality']
       cl.update({'_id':docid},{'$set':{'quality':q}})
