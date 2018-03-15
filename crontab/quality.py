@@ -40,7 +40,11 @@ def process(d):
       q = j['result'][imgid]['quality']
       cl.update({'_id':docid},{'$set':{'quality':q}})
     except Exception, e:
-      print when(), 'ERROR:',e,docid
+      t,o,tb = sys.exc_info()
+      f = tb.tb_frame
+      lineno = tb.tb_lineno
+      filename = f.f_code.co_filename
+      sys.stderr.write('(%s) ERROR: Exception in %s, Line %s: %s, docid %s\n' % (when(), filename, str(lineno), e, docid))
   return d['lastUpdate']
 
 pool = ThreadPool(20)
