@@ -1,16 +1,18 @@
 #!/usr/bin/python
 # coding=utf-8
 
-'''
+"""
 iqa.py
 
 Class for image quality assessment.
 
 Created by Xu Kaifeng on 2017.12.20
 Particle Holding Inc. All rights reserved.
-'''
+"""
 
-import sys,cv2,urllib
+import sys
+import cv2
+import urllib
 import numpy as np
 
 class IQA:

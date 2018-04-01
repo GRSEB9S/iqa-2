@@ -1,14 +1,14 @@
 #!/usr/bin/python
 # coding=utf-8
 
-'''
+"""
 server.py
 
 Simple server to return quality assessment for a given image.
 
 Created by Xu Kaifeng on 2017.09.12
 Particle Holding Inc. All rights reserved.
-'''
+"""
 
 import SimpleHTTPServer
 import SocketServer
