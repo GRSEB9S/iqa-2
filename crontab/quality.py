@@ -30,13 +30,16 @@ if __name__ == '__main__':
                     r = requests.get('http://a4api.ha.nb.com/Website/contents/content?docid=%s&fields=image' % docid)
                     j = json.loads(r.content)
                     if 'documents' not in j:
-                        raise Exception('docid not exists')
-                    if 'image' not in j['documents'][0]:
-                        raise Exception('image not exists')
-                    imgid = j['documents'][0]['image']
-                    r = requests.get('http://a4api.ha.nb.com/Website/image/quality-check?image=%s' % imgid)
-                    j = json.loads(r.content)
-                    q = j['result'][imgid]['quality']
+                        sys.stderr.write('(%s) ERROR: docid not exists: %s\n' % (when(), docid))
+                        q = 'high'
+                    elif 'image' not in j['documents'][0]:
+                        sys.stderr.write('(%s) ERROR: image not exists: %s\n' % (when(), docid))
+                        q = 'high'
+                    else:
+                        imgid = j['documents'][0]['image']
+                        r = requests.get('http://a4api.ha.nb.com/Website/image/quality-check?image=%s' % imgid)
+                        j = json.loads(r.content)
+                        q = j['result'][imgid]['quality']
                     cl.update({'_id':docid},{'$set':{'quality':q}})
                 except Exception, e:
                     t, o, tb = sys.exc_info()
