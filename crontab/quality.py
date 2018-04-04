@@ -25,7 +25,7 @@ if __name__ == '__main__':
     cr1 = c1['documentLabels']['poi']
     cr2 = c2['serving']['displayDocument']
 
-    with cr1.find({'lastUpdate': {'$gte': last_ts}}).limit(20000) as result:
+    with cr1.find({'lastUpdate': {'$gte': last_ts}}).limit(10000) as result:
         docs = [d for d in result]
 
     def process(d):
