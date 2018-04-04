@@ -52,7 +52,7 @@ if __name__ == '__main__':
                 sys.stderr.write('(%s) ERROR: Exception in %s, Line %s: %s, docid %s\n' % (when(), filename, str(lineno), e, d['_id']))
         return d['lastUpdate']
 
-    pool = ThreadPool(20)
+    pool = ThreadPool(10)
     results = pool.map(process, docs)
     pool.close()
     pool.join()
