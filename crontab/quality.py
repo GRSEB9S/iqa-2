@@ -25,31 +25,30 @@ if __name__ == '__main__':
     cr1 = c1['documentLabels']['poi']
     cr2 = c2['serving']['displayDocument']
 
-    with cr1.find({'lastUpdate': {'$gte': last_ts}}).limit(10000) as result:
+    with cr1.find({'lastUpdate': {'$gte': last_ts}, 'quality': {'$exists': False}}).limit(10000) as result:
         docs = [d for d in result]
 
     def process(d):
-        if 'quality' not in d:
-            try:
-                one = cr2.find_one({'_id': d['_id']}, {'image': 1})
-                if not one:
-                    sys.stderr.write('(%s) ERROR: docid not exists: %s\n' % (when(), d['_id']))
-                    q = 'high'
-                elif not one.get('image', False):
-                    sys.stderr.write('(%s) ERROR: image not exists: %s\n' % (when(), d['_id']))
-                    q = 'high'
-                else:
-                    imgid = one['image']
-                    r = requests.get('http://a4api.ha.nb.com/Website/image/quality-check?image=%s' % imgid)
-                    j = json.loads(r.content)
-                    q = j['result'][imgid]['quality']
-                cr1.update({'_id': d['_id']}, {'$set': {'quality': q}})
-            except Exception, e:
-                t, o, tb = sys.exc_info()
-                f = tb.tb_frame
-                lineno = tb.tb_lineno
-                filename = f.f_code.co_filename
-                sys.stderr.write('(%s) ERROR: Exception in %s, Line %s: %s, docid %s\n' % (when(), filename, str(lineno), e, d['_id']))
+        try:
+            one = cr2.find_one({'_id': d['_id']}, {'image': 1})
+            if not one:
+                sys.stderr.write('(%s) ERROR: docid not exists: %s\n' % (when(), d['_id']))
+                q = 'high'
+            elif not one.get('image', False):
+                sys.stderr.write('(%s) ERROR: image not exists: %s\n' % (when(), d['_id']))
+                q = 'high'
+            else:
+                imgid = one['image']
+                r = requests.get('http://a4api.ha.nb.com/Website/image/quality-check?image=%s' % imgid)
+                j = json.loads(r.content)
+                q = j['result'][imgid]['quality']
+            cr1.update({'_id': d['_id']}, {'$set': {'quality': q}})
+        except Exception, e:
+            t, o, tb = sys.exc_info()
+            f = tb.tb_frame
+            lineno = tb.tb_lineno
+            filename = f.f_code.co_filename
+            sys.stderr.write('(%s) ERROR: Exception in %s, Line %s: %s, docid %s\n' % (when(), filename, str(lineno), e, d['_id']))
         return d['lastUpdate']
 
     pool = ThreadPool(8)
